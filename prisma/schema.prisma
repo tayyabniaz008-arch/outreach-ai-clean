@@ -1,0 +1,100 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum ConversationMode {
+  DRAFT
+  AUTO
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  REPLIED
+  INTERESTED
+  NOT_INTERESTED
+  OPTED_OUT
+  BOUNCED
+}
+
+model Lead {
+  id         String            @id @default(cuid())
+  name       String?
+  email      String            @unique
+  website    String?
+  niche      String?
+  status     LeadStatus        @default(NEW)
+  mode       ConversationMode  @default(DRAFT)
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
+  deletedAt  DateTime?
+
+  messages   Message[]
+  campaigns  CampaignLead[]
+}
+
+model Message {
+  id                String   @id @default(cuid())
+  leadId            String
+  lead              Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  direction         String
+  body              String
+  aiGenerated       Boolean  @default(false)
+  approved          Boolean  @default(false)
+  providerMessageId String?
+  threadId          String?
+  createdAt         DateTime @default(now())
+}
+
+model Campaign {
+  id             String         @id @default(cuid())
+  name           String
+  template       String
+  dailyLimit     Int            @default(30)
+  status         String         @default("DRAFT")
+  sentCount      Int            @default(0)
+  skippedCount   Int            @default(0)
+  lastRunAt      DateTime?
+  createdAt      DateTime       @default(now())
+
+  gmailAccountId String?
+  gmailAccount   GmailAccount?  @relation(fields: [gmailAccountId], references: [id], onDelete: SetNull)
+
+  leads          CampaignLead[]
+}
+
+model CampaignLead {
+  id         String   @id @default(cuid())
+  campaignId String
+  leadId     String
+
+  campaign   Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  lead       Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  createdAt  DateTime @default(now())
+
+  sentAt     DateTime?
+  status     String   @default("PENDING")
+  error      String?
+
+  @@unique([campaignId, leadId])
+}
+
+model GmailAccount {
+  id           String     @id @default(cuid())
+  email        String     @unique
+  refreshToken String
+
+  signature    String     @default("\n\nTayyab Niaz\nFreelance Blogger Expert")
+
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  campaigns    Campaign[]
+}
