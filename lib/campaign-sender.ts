@@ -31,6 +31,27 @@ function getDayRange() {
   };
 }
 
+// 🔥 NEW: Placeholder replacement function
+function replacePlaceholders(text: string, lead: any): string {
+  return text
+    .replace(/\[Name\]/g, lead.name || "there")
+    .replace(/\[Website\]/g, lead.website || "your website")
+    .replace(/\[Email\]/g, lead.email || "")
+    .replace(/\[Company\]/g, lead.company || "your company");
+}
+
+// 🔥 NEW: Signature ko properly format karne ke liye
+function formatSignature(signature: string | null): string {
+  if (!signature) return "";
+  
+  // Ensure signature has proper spacing
+  const trimmed = signature.trim();
+  if (trimmed && !trimmed.startsWith("\n\n")) {
+    return `\n\n${trimmed}`;
+  }
+  return trimmed;
+}
+
 export async function sendCampaignNow(
   campaignId: string
 ): Promise<CampaignSendResult> {
@@ -129,6 +150,9 @@ export async function sendCampaignNow(
     error: string;
   }[] = [];
 
+  // 🔥 Signature ko format karein
+  const signature = formatSignature(campaign.gmailAccount.signature);
+
   for (const assignment of campaign.leads) {
     if (sent >= remainingToday) {
       break;
@@ -173,8 +197,11 @@ export async function sendCampaignNow(
         continue;
       }
 
-      const emailBody =
-        `${campaign.template.trim()}${campaign.gmailAccount.signature}`;
+      // 🔥 NEW: Placeholders ko replace karein
+      const personalizedTemplate = replacePlaceholders(campaign.template, lead);
+      
+      // 🔥 Signature ko add karein (with proper formatting)
+      const emailBody = `${personalizedTemplate.trim()}${signature}`;
 
       const gmailResult =
         await sendGmailMessage({

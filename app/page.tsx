@@ -1777,8 +1777,7 @@ export default function Home() {
               0 ? (
               <p className="muted">
                 No contacts yet.
-                Import a CSV from
-                Contacts.
+                Import a CSV from                Contacts.
               </p>
             ) : (
               <table className="table">
@@ -3346,8 +3345,44 @@ export default function Home() {
                             "vertical",
                           fontFamily:
                             "inherit",
+                          color: "#666",
+                          fontSize: "14px",
                         }}
                       />
+
+                      {/* 🔥 Signature preview — gray color mein */}
+                      {account.signature && (
+                        <div
+                          style={{
+                            marginTop: 8,
+                            padding: 12,
+                            background: "#f8fafc",
+                            borderRadius: 8,
+                            border: "1px solid #eef2f6",
+                          }}
+                        >
+                          <div
+                            className="muted small"
+                            style={{
+                              marginBottom: 4,
+                              color: "#888",
+                              fontSize: "12px",
+                            }}
+                          >
+                            Preview:
+                          </div>
+                          <div
+                            style={{
+                              color: "#666",
+                              fontSize: "14px",
+                              whiteSpace: "pre-wrap",
+                              fontFamily: "inherit",
+                            }}
+                          >
+                            {account.signature}
+                          </div>
+                        </div>
+                      )}
                     </label>
 
                     <div
@@ -3833,7 +3868,7 @@ export default function Home() {
                       .value
                   )
                 }
-                placeholder="Hi, I’m reaching out regarding a guest post and content collaboration opportunity..."
+                placeholder="Hi, I'm reaching out regarding a guest post and content collaboration opportunity..."
                 rows={
                   7
                 }
