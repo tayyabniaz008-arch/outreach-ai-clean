@@ -31,7 +31,7 @@ function getDayRange() {
   };
 }
 
-// 🔥 NEW: Placeholder replacement function
+// 🔥 Placeholder replacement function
 function replacePlaceholders(text: string, lead: any): string {
   return text
     .replace(/\[Name\]/g, lead.name || "there")
@@ -40,7 +40,7 @@ function replacePlaceholders(text: string, lead: any): string {
     .replace(/\[Company\]/g, lead.company || "your company");
 }
 
-// 🔥 NEW: Signature ko properly format karne ke liye
+// 🔥 Signature ko properly format karne ke liye
 function formatSignature(signature: string | null): string {
   if (!signature) return "";
   
@@ -51,6 +51,9 @@ function formatSignature(signature: string | null): string {
   }
   return trimmed;
 }
+
+// ⏱️ Delay between emails (1 minute = 60000 milliseconds)
+const EMAIL_DELAY_MS = 60000;
 
 export async function sendCampaignNow(
   campaignId: string
@@ -197,7 +200,7 @@ export async function sendCampaignNow(
         continue;
       }
 
-      // 🔥 NEW: Placeholders ko replace karein
+      // 🔥 Placeholders ko replace karein
       const personalizedTemplate = replacePlaceholders(campaign.template, lead);
       
       // 🔥 Signature ko add karein (with proper formatting)
@@ -249,10 +252,11 @@ export async function sendCampaignNow(
 
       sent++;
 
+      // ⏱️ 1 MINUTE DELAY between emails
       if (sent < remainingToday) {
         await new Promise(
           (resolve) =>
-            setTimeout(resolve, 1000)
+            setTimeout(resolve, EMAIL_DELAY_MS) // 60000ms = 1 minute
         );
       }
     } catch (error) {
