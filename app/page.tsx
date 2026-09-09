@@ -41,6 +41,11 @@ type Campaign = {
     id: string;
     email: string;
   } | null;
+  // 🔥 Follow-up fields
+  followupSubject1?: string | null;
+  followupTemplate1?: string | null;
+  followupSubject2?: string | null;
+  followupTemplate2?: string | null;
 };
 
 type GmailAccount = {
@@ -182,6 +187,12 @@ export default function Home() {
 
   const [campaignGmailAccountId, setCampaignGmailAccountId] =
     useState("");
+
+  // 🔥 Follow-up state variables
+  const [campaignFollowupSubject1, setCampaignFollowupSubject1] = useState("");
+  const [campaignFollowupTemplate1, setCampaignFollowupTemplate1] = useState("");
+  const [campaignFollowupSubject2, setCampaignFollowupSubject2] = useState("");
+  const [campaignFollowupTemplate2, setCampaignFollowupTemplate2] = useState("");
 
   const [creatingCampaign, setCreatingCampaign] =
     useState(false);
@@ -1087,6 +1098,12 @@ export default function Home() {
     setCampaignTemplate("");
     setCampaignDailyLimit(30);
 
+    // 🔥 Reset follow-up fields
+    setCampaignFollowupSubject1("");
+    setCampaignFollowupTemplate1("");
+    setCampaignFollowupSubject2("");
+    setCampaignFollowupTemplate2("");
+
     setCampaignGmailAccountId(
       selectedGmailAccountId ||
         gmailAccounts[0]?.id ||
@@ -1168,6 +1185,11 @@ export default function Home() {
                 campaignDailyLimit,
               gmailAccountId:
                 campaignGmailAccountId,
+              // 🔥 Follow-up fields
+              followupSubject1: campaignFollowupSubject1.trim(),
+              followupTemplate1: campaignFollowupTemplate1.trim(),
+              followupSubject2: campaignFollowupSubject2.trim(),
+              followupTemplate2: campaignFollowupTemplate2.trim(),
             }),
           }
         );
@@ -1189,6 +1211,12 @@ export default function Home() {
       setCampaignName("");
       setCampaignTemplate("");
       setCampaignDailyLimit(30);
+
+      // 🔥 Reset follow-up fields
+      setCampaignFollowupSubject1("");
+      setCampaignFollowupTemplate1("");
+      setCampaignFollowupSubject2("");
+      setCampaignFollowupTemplate2("");
 
       setCampaignGmailAccountId(
         selectedGmailAccountId ||
@@ -3887,6 +3915,87 @@ export default function Home() {
                     8,
                   resize:
                     "vertical",
+                }}
+              />
+            </label>
+
+            {/* 🔥 Follow-up Settings */}
+            <hr style={{ marginTop: 8, marginBottom: 16 }} />
+
+            <h4 style={{ marginBottom: 8 }}>Follow-up Settings</h4>
+
+            <label>
+              1st Follow-up Subject
+              <input
+                value={campaignFollowupSubject1}
+                onChange={(e) => setCampaignFollowupSubject1(e.target.value)}
+                placeholder="Following up: Guest Post for [Website]"
+                style={{
+                  display: "block",
+                  width: "100%",
+                  padding: 12,
+                  marginTop: 6,
+                  marginBottom: 15,
+                  border: "1px solid #dbe8f0",
+                  borderRadius: 8,
+                }}
+              />
+            </label>
+
+            <label>
+              1st Follow-up Template
+              <textarea
+                value={campaignFollowupTemplate1}
+                onChange={(e) => setCampaignFollowupTemplate1(e.target.value)}
+                placeholder="Hi [Name], I hope you're doing well. I just wanted to follow up..."
+                rows={4}
+                style={{
+                  display: "block",
+                  width: "100%",
+                  padding: 12,
+                  marginTop: 6,
+                  marginBottom: 15,
+                  border: "1px solid #dbe8f0",
+                  borderRadius: 8,
+                  resize: "vertical",
+                }}
+              />
+            </label>
+
+            <label>
+              2nd Follow-up Subject
+              <input
+                value={campaignFollowupSubject2}
+                onChange={(e) => setCampaignFollowupSubject2(e.target.value)}
+                placeholder="Last chance: Guest Post Opportunity"
+                style={{
+                  display: "block",
+                  width: "100%",
+                  padding: 12,
+                  marginTop: 6,
+                  marginBottom: 15,
+                  border: "1px solid #dbe8f0",
+                  borderRadius: 8,
+                }}
+              />
+            </label>
+
+            <label>
+              2nd Follow-up Template
+              <textarea
+                value={campaignFollowupTemplate2}
+                onChange={(e) => setCampaignFollowupTemplate2(e.target.value)}
+                placeholder="Hi [Name], This will be my last follow-up..."
+                rows={4}
+                style={{
+                  display: "block",
+                  width: "100%",
+                  padding: 12,
+                  marginTop: 6,
+                  marginBottom: 15,
+                  border: "1px solid #dbe8f0",
+                  borderRadius: 8,
+                  resize: "vertical",
                 }}
               />
             </label>
