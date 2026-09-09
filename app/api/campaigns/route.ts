@@ -62,6 +62,23 @@ export async function POST(req: Request) {
       body?.gmailAccountId || ""
     ).trim();
 
+    // 🔥 Follow-up fields
+    const followupSubject1 = String(
+      body?.followupSubject1 || ""
+    ).trim();
+
+    const followupTemplate1 = String(
+      body?.followupTemplate1 || ""
+    ).trim();
+
+    const followupSubject2 = String(
+      body?.followupSubject2 || ""
+    ).trim();
+
+    const followupTemplate2 = String(
+      body?.followupTemplate2 || ""
+    ).trim();
+
     if (!name) {
       return NextResponse.json(
         {
@@ -134,6 +151,7 @@ export async function POST(req: Request) {
       );
     }
 
+    // 🔥 Campaign create with follow-up fields
     const campaign =
       await db.campaign.create({
         data: {
@@ -141,6 +159,11 @@ export async function POST(req: Request) {
           template,
           dailyLimit,
           gmailAccountId,
+          // 🔥 Follow-up fields
+          followupSubject1: followupSubject1 || null,
+          followupTemplate1: followupTemplate1 || null,
+          followupSubject2: followupSubject2 || null,
+          followupTemplate2: followupTemplate2 || null,
         },
         include: {
           gmailAccount: {
