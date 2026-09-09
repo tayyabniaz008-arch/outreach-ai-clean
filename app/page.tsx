@@ -3686,34 +3686,29 @@ export default function Home() {
       ========================= */}
 
       {showCampaign && (
-        <div
-          style={{
-            position:
-              "fixed",
-            inset: 0,
-            background:
-              "rgba(0,0,0,0.35)",
-            display:
-              "flex",
-            alignItems:
-              "center",
-            justifyContent:
-              "center",
-            padding: 20,
-            zIndex:
-              1000,
-          }}
-        >
-          <div
-            className="card"
-            style={{
-              width:
-                "100%",
-              maxWidth:
-                520,
-            }}
-          >
-            <div className="top">
+  <div
+    style={{
+      position: "fixed",
+      inset: 0,
+      background: "rgba(0,0,0,0.35)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      padding: 20,
+      zIndex: 1000,
+    }}
+  >
+    <div
+      className="card"
+      style={{
+        width: "100%",
+        maxWidth: 520,
+        maxHeight: "90vh",    
+        overflowY: "auto",    
+        padding: "20px",       
+      }}
+    >
+      <div className="top">
               <h2>
                 New Campaign
               </h2>
