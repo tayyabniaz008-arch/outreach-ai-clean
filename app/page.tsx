@@ -30,6 +30,7 @@ type Lead = {
 type Campaign = {
   id: string;
   name: string;
+  subject?: string | null;
   template: string;
   dailyLimit: number;
   status: string;
@@ -177,10 +178,13 @@ export default function Home() {
     useState(false);
 
   const [campaignName, setCampaignName] =
-    useState("");
+  useState("");
 
-  const [campaignTemplate, setCampaignTemplate] =
-    useState("");
+const [campaignSubject, setCampaignSubject] =
+  useState("");
+
+const [campaignTemplate, setCampaignTemplate] =
+  useState("");
 
   const [campaignDailyLimit, setCampaignDailyLimit] =
     useState(30);
@@ -1091,11 +1095,12 @@ export default function Home() {
   // Campaign form
   // =========================
 
-  function openCampaignForm() {
-    setCampaignError("");
-    setCampaignMessage("");
-    setCampaignName("");
-    setCampaignTemplate("");
+   function openCampaignForm() {
+  setCampaignError("");
+  setCampaignMessage("");
+  setCampaignName("");
+  setCampaignSubject("");
+  setCampaignTemplate("");
     setCampaignDailyLimit(30);
 
     // 🔥 Reset follow-up fields
@@ -1177,11 +1182,12 @@ export default function Home() {
                 "application/json",
             },
             body: JSON.stringify({
-              name:
-                campaignName.trim(),
-              template:
-                campaignTemplate.trim(),
-              dailyLimit:
+  name:
+    campaignName.trim(),
+  subject:
+    campaignSubject.trim(),
+  template:
+    campaignTemplate.trim(),
                 campaignDailyLimit,
               gmailAccountId:
                 campaignGmailAccountId,
@@ -3726,37 +3732,37 @@ export default function Home() {
             </div>
 
             <label>
-              Campaign Name
+  Subject Line
 
-              <input
-                value={
-                  campaignName
-                }
-                onChange={(
-                  e
-                ) =>
-                  setCampaignName(
-                    e.target
-                      .value
-                  )
-                }
-                placeholder="Technology Guest Post Outreach"
-                style={{
-                  display:
-                    "block",
-                  width:
-                    "100%",
-                  padding: 12,
-                  marginTop: 6,
-                  marginBottom:
-                    15,
-                  border:
-                    "1px solid #dbe8f0",
-                  borderRadius:
-                    8,
-                }}
-              />
-            </label>
+  <input
+    value={
+      campaignSubject
+    }
+    onChange={(
+      e
+    ) =>
+      setCampaignSubject(
+        e.target
+          .value
+      )
+    }
+    placeholder="Quick collaboration idea for [Website]"
+    style={{
+      display:
+        "block",
+      width:
+        "100%",
+      padding: 12,
+      marginTop: 6,
+      marginBottom:
+        15,
+      border:
+        "1px solid #dbe8f0",
+      borderRadius:
+        8,
+    }}
+  />
+</label>
 
             <label>
               Daily Limit
