@@ -63,6 +63,12 @@ model Campaign {
   lastRunAt      DateTime?
   createdAt      DateTime       @default(now())
 
+  // 🔥 Follow-up fields
+  followupSubject1  String?
+  followupTemplate1 String?
+  followupSubject2  String?
+  followupTemplate2 String?
+
   gmailAccountId String?
   gmailAccount   GmailAccount?  @relation(fields: [gmailAccountId], references: [id], onDelete: SetNull)
 
