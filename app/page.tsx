@@ -164,7 +164,19 @@ export default function Home() {
   // =========================
   // Campaigns
   // =========================
+const [reportStats, setReportStats] = useState({
+  totalContacts: 0,
+  emailsSent: 0,
+  totalReplies: 0,
+  replyRate: "0",
+  interestedCount: 0,
+  totalCampaigns: 0,
+  activeCampaigns: 0,
+  recentSent: 0,
+  recentReplies: 0,
+});
 
+const [loadingReports, setLoadingReports] = useState(false);
   const [campaigns, setCampaigns] =
     useState<Campaign[]>([]);
 
@@ -555,7 +567,31 @@ const [campaignTemplate, setCampaignTemplate] =
       setLoadingCampaigns(false);
     }
   }
+// =========================
+// Load Reports
+// =========================
 
+async function loadReports() {
+  try {
+    setLoadingReports(true);
+
+    const response = await fetch("/api/reports", {
+      cache: "no-store",
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data?.error || "Failed to load reports");
+    }
+
+    setReportStats(data.stats);
+  } catch (error) {
+    console.error("Reports loading error:", error);
+  } finally {
+    setLoadingReports(false);
+  }
+}
   // =========================
   // Load Gmail Accounts
   // =========================
@@ -706,7 +742,11 @@ const [campaignTemplate, setCampaignTemplate] =
       loadGmailAccounts();
     }
   }, [activePage]);
-
+useEffect(() => {
+  if (activePage === "Reports") {
+    loadReports();
+  }
+}, [activePage]);
   // =========================
   // Load conversation history
   // =========================
@@ -3150,63 +3190,63 @@ const [campaignTemplate, setCampaignTemplate] =
   // =========================
 
   function renderReports() {
-    return (
-      <div className="card">
-        <h2>
-          Reports
-        </h2>
+  return (
+    <div className="card">
+      <h2>Reports</h2>
+      <p className="muted">Track your outreach performance.</p>
 
-        <p className="muted">
-          Track your outreach performance.
-        </p>
-
-        <section className="grid stats">
-          <div className="card">
-            <div className="muted">
-              Contacts
+      {loadingReports ? (
+        <p className="muted">Loading reports...</p>
+      ) : (
+        <>
+          <h3 style={{ marginTop: 16 }}>Overall Stats</h3>
+          <section className="grid stats">
+            <div className="card">
+              <div className="muted">Contacts</div>
+              <div className="stat">{reportStats.totalContacts}</div>
             </div>
-
-            <div className="stat">
-              {
-                leads.length
-              }
+            <div className="card">
+              <div className="muted">Emails Sent</div>
+              <div className="stat">{reportStats.emailsSent}</div>
             </div>
-          </div>
-
-          <div className="card">
-            <div className="muted">
-              Emails Sent
+            <div className="card">
+              <div className="muted">Reply Rate</div>
+              <div className="stat">{reportStats.replyRate}%</div>
             </div>
-
-            <div className="stat">
-              0
+            <div className="card">
+              <div className="muted">Interested</div>
+              <div className="stat">{reportStats.interestedCount}</div>
             </div>
-          </div>
+          </section>
 
-          <div className="card">
-            <div className="muted">
-              Reply Rate
+          <h3 style={{ marginTop: 24 }}>Campaigns</h3>
+          <section className="grid stats">
+            <div className="card">
+              <div className="muted">Total Campaigns</div>
+              <div className="stat">{reportStats.totalCampaigns}</div>
             </div>
-
-            <div className="stat">
-              0%
+            <div className="card">
+              <div className="muted">Active Campaigns</div>
+              <div className="stat">{reportStats.activeCampaigns}</div>
             </div>
-          </div>
+          </section>
 
-          <div className="card">
-            <div className="muted">
-              Interested
+          <h3 style={{ marginTop: 24 }}>Last 30 Days</h3>
+          <section className="grid stats">
+            <div className="card">
+              <div className="muted">Emails Sent</div>
+              <div className="stat">{reportStats.recentSent}</div>
             </div>
-
-            <div className="stat">
-              0
+            <div className="card">
+              <div className="muted">Replies Received</div>
+              <div className="stat">{reportStats.recentReplies}</div>
             </div>
-          </div>
-        </section>
-      </div>
-    );
-  }
-
+          </section>
+        </>
+      )}
+    </div>
+  );
+}
   // =========================
   // Settings
   // =========================

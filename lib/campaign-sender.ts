@@ -44,7 +44,6 @@ function replacePlaceholders(text: string, lead: any): string {
 function formatSignature(signature: string | null): string {
   if (!signature) return "";
   
-  // Ensure signature has proper spacing
   const trimmed = signature.trim();
   if (trimmed && !trimmed.startsWith("\n\n")) {
     return `\n\n${trimmed}`;
@@ -156,6 +155,9 @@ export async function sendCampaignNow(
   // 🔥 Signature ko format karein
   const signature = formatSignature(campaign.gmailAccount.signature);
 
+  // 🔥 Subject line prepare karein (subject ya campaign name)
+  const baseSubject = campaign.subject || campaign.name;
+
   for (const assignment of campaign.leads) {
     if (sent >= remainingToday) {
       break;
@@ -200,11 +202,14 @@ export async function sendCampaignNow(
         continue;
       }
 
-      // 🔥 Placeholders ko replace karein
+      // 🔥 Placeholders ko replace karein (body)
       const personalizedTemplate = replacePlaceholders(campaign.template, lead);
       
       // 🔥 Signature ko add karein (with proper formatting)
       const emailBody = `${personalizedTemplate.trim()}${signature}`;
+
+      // 🔥 Subject mein bhi placeholders replace karein
+      const finalSubject = replacePlaceholders(baseSubject, lead);
 
       const gmailResult =
         await sendGmailMessage({
@@ -212,7 +217,7 @@ export async function sendCampaignNow(
             campaign.gmailAccount
               .refreshToken,
           to: lead.email,
-          subject: campaign.name,
+          subject: finalSubject,   // 🔥 NEW - Subject use karein
           body: emailBody,
         });
 
@@ -256,7 +261,7 @@ export async function sendCampaignNow(
       if (sent < remainingToday) {
         await new Promise(
           (resolve) =>
-            setTimeout(resolve, EMAIL_DELAY_MS) // 60000ms = 1 minute
+            setTimeout(resolve, EMAIL_DELAY_MS)
         );
       }
     } catch (error) {

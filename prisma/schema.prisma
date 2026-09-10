@@ -55,6 +55,7 @@ model Message {
 model Campaign {
   id             String         @id @default(cuid())
   name           String
+  subject        String?        // 🔥 NEW - Subject line
   template       String
   dailyLimit     Int            @default(30)
   status         String         @default("DRAFT")

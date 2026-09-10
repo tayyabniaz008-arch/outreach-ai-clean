@@ -50,6 +50,11 @@ export async function POST(req: Request) {
       body?.name || ""
     ).trim();
 
+    // 🔥 NEW - Subject line
+    const subject = String(
+      body?.subject || ""
+    ).trim();
+
     const template = String(
       body?.template || ""
     ).trim();
@@ -151,11 +156,12 @@ export async function POST(req: Request) {
       );
     }
 
-    // 🔥 Campaign create with follow-up fields
+    // 🔥 Campaign create with subject and follow-up fields
     const campaign =
       await db.campaign.create({
         data: {
           name,
+          subject: subject || null,   // 🔥 NEW
           template,
           dailyLimit,
           gmailAccountId,
