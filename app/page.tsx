@@ -3651,46 +3651,68 @@ useEffect(() => {
       {/* Sidebar */}
 
       <aside className="side">
-        <div className="brand">
-          OutreachAI
-        </div>
+  <div className="brand">
+    OutreachAI
+  </div>
 
-        <div className="nav">
-          {menuItems.map(
-            (item) => (
-              <div
-                key={item}
-                onClick={() =>
-                  setActivePage(
-                    item
-                  )
-                }
-                style={{
-                  cursor:
-                    "pointer",
-                  background:
-                    activePage ===
-                    item
-                      ? "#e8f7fb"
-                      : "transparent",
-                  color:
-                    activePage ===
-                    item
-                      ? "#087ea4"
-                      : "#102a43",
-                  fontWeight:
-                    activePage ===
-                    item
-                      ? 600
-                      : 400,
-                }}
-              >
-                {item}
-              </div>
+  <div className="nav">
+    {menuItems.map(
+      (item) => (
+        <div
+          key={item}
+          onClick={() =>
+            setActivePage(
+              item
             )
-          )}
+          }
+          style={{
+            cursor:
+              "pointer",
+            background:
+              activePage ===
+              item
+                ? "#e8f7fb"
+                : "transparent",
+            color:
+              activePage ===
+              item
+                ? "#087ea4"
+                : "#102a43",
+            fontWeight:
+              activePage ===
+              item
+                ? 600
+                : 400,
+          }}
+        >
+          {item}
         </div>
-      </aside>
+      )
+    )}
+  </div>
+
+  {/* 🔥 Logout Button */}
+  <div
+    onClick={async () => {
+      if (window.confirm("Logout from OutreachAI?")) {
+        await fetch("/api/auth/logout", { method: "POST" });
+        window.location.href = "/login";
+      }
+    }}
+    style={{
+      cursor: "pointer",
+      padding: "12px 16px",
+      marginTop: "auto",
+      color: "#a52a2a",
+      fontWeight: 600,
+      borderTop: "1px solid #dbe8f0",
+      paddingTop: 16,
+      fontSize: 14,
+    }}
+  >
+    🚪 Logout
+  </div>
+</aside>
 
       {/* Main */}
 

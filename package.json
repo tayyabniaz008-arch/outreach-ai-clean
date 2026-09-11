@@ -11,6 +11,7 @@
     "@google/genai": "^2.18.0",
     "@prisma/client": "^5.22.0",
     "googleapis": "^176.0.0",
+    "jsonwebtoken": "^9.0.3",
     "next": "^15.0.0",
     "openai": "^5.0.0",
     "papaparse": "^5.4.3",
@@ -18,6 +19,7 @@
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^20.0.0",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.5",
